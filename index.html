@@ -15,6 +15,8 @@
 <body>
     <!--no ponemos method por que lo haremos desde jquery-->
     <form id="card-form">
+        <input type="hidden" id="conektaTokenId" name="conektaTokenId" value="">
+
         <div class="card">
             <div class="card-header">
                 <div class="row display-tr">
@@ -31,7 +33,7 @@
                     <div class="col-md-6">
                         <label for="">No. Tarjeta</label>
                         <!---->
-                        <input data-conekta="card[number]" type="text" class="form-control"  value="4242424242424242" maxlength="16">
+                        <input data-conekta="card[number]" type="text" class="form-control"  value="4242424242424242" maxlength="16" name="card" id="card">
                     </div>
                 </div>
 
@@ -53,6 +55,11 @@
                         
                     </div>
                 </div>
+                <label for="">Email</label>
+                <input type="email" name="email" value="escoem@outlook.com">
+                <input type="text" value="papitas" name="concepto">
+                <input type="text" value="30" name="monto">
+                <br>
                 <br>
                 <div class="row">
                     <div class="col-md-12">
@@ -63,11 +70,10 @@
                 </div>
             </div>
         </div>
-        <input type="text" id="conektaTokenId" name="conektaTokenId" value="">
     </form>
 
     <script>
-        Conekta.setPublicKey("Public key");
+        Conekta.setPublicKey("key_N2fSvFyok7drVMPYv8QGp8g");
         //Esta funcion la usaremos para meter el token dentro de un hidden
         var conektaSuccessResponseHandler = function(token){
             
@@ -76,7 +82,7 @@
         var conektaErrorResponseHandler = function(response){
             console.log(response);
             var $form = $("#card-form");
-            alert(response.message_to_purcharser);
+            alert(response.message_to_purchaser);
         }
         $(document).ready(function(){
             $("#card-form").submit(function(e){
@@ -85,6 +91,18 @@
                 Conekta.Token.create($form,conektaSuccessResponseHandler, conektaErrorResponseHandler);
             })
         });
+        //Creamos la funcion pay 
+        function jsPay(){
+            let params=$("#card-form").serialize();
+            let url="pay.php";
+            $.post(url,params, function(data){
+                if(data=="1"){
+                    alert("Se realizo el pago :)");
+                }else{
+                    alert(data);
+                }
+            });
+        }
 
     </script>
 
