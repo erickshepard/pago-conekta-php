@@ -57,8 +57,8 @@
                 </div>
                 <label for="">Email</label>
                 <input type="email" name="email" value="escoem@outlook.com">
-                <input type="text" value="papitas" name="concepto">
-                <input type="text" value="30" name="monto">
+                <input type="text" value="papitas" name="description">
+                <input type="text" value="30" name="total">
                 <br>
                 <br>
                 <div class="row">
@@ -73,11 +73,13 @@
     </form>
 
     <script>
-        Conekta.setPublicKey("key_N2fSvFyok7drVMPYv8QGp8g");
+        Conekta.setPublicKey("your key public");
         //Esta funcion la usaremos para meter el token dentro de un hidden
         var conektaSuccessResponseHandler = function(token){
             
             $("#conektaTokenId").val(token.id);
+            //si el tokenizado fue exitoso
+            jsPay();
         }
         var conektaErrorResponseHandler = function(response){
             console.log(response);
@@ -94,16 +96,25 @@
         //Creamos la funcion pay 
         function jsPay(){
             let params=$("#card-form").serialize();
+        
             let url="pay.php";
             $.post(url,params, function(data){
-                if(data=="1"){
+                console.log(data);
+                if(data == 1){
                     alert("Se realizo el pago :)");
+                    jsClean();
                 }else{
-                    alert(data);
+                    alert("error:"+data);
                 }
             });
         }
+        //funcion para limpiar el formulario
+        function jsClean(){
+            $(".form-control").prop("value", "");
+            $("#conektaTokenId").prop("value","");
 
+
+        }
     </script>
 
 </body>

@@ -4,11 +4,11 @@
 
 
 
-
+require_once("bin/conekta-php-master/lib/Conekta.php");
 
 class Payment{
     //Ky priv
-    private $ApiKey = "key_rsCvg5eQGB3HMqPFa5QrAQ";
+    private $ApiKey = "Your key private";
     private $ApiVersion = "2.0.0";
 
     public function __construct($token, $card, $name, $description,$total,$email){
@@ -100,8 +100,16 @@ class Payment{
                         )//first line_item
                     ), //line_items
                     "currency" => "MXN",
-                    "customer_info" => $this->customer_info, //customer_info
-                    "charges" => $this->charge_array //charges
+                    "customer_info" => array(
+                        "customer_id" => $this->customer->id
+                    ), //customer_info
+                    "charges" => array(
+                        array(
+                            "payment_method" => array(
+                                "type" => "default"
+                            )
+                        )
+                    )
                 )//order
             );
         } catch (\Conekta\ProcessingError $error){
